@@ -9,7 +9,7 @@
 AABCharacterBase::AABCharacterBase()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	//PrimaryActorTick.bCanEverTick = true;
 
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationRoll = false;
@@ -44,20 +44,6 @@ AABCharacterBase::AABCharacterBase()
 	{
 		GetMesh()->SetAnimInstanceClass(CharacterAnimRef.Class);
 	}
-}
-
-// Called when the game starts or when spawned
-void AABCharacterBase::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
-
-// Called every frame
-void AABCharacterBase::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
 }
 
 // Called to bind functionality to input
