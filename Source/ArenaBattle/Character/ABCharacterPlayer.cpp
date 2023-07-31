@@ -4,6 +4,7 @@
 #include "Character/ABCharacterPlayer.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
+#include "InputMappingContext.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 
@@ -42,6 +43,17 @@ AABCharacterPlayer::AABCharacterPlayer()
 	if (InputActionLookRef.Object)
 	{
 		LookAction = InputActionLookRef.Object;
+	}
+}
+
+void AABCharacterPlayer::BeginPlay()
+{
+	Super::BeginPlay();
+
+	APlayerController* PlayerController = CastChecked<APlayerController>(GetController());
+	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
+	{
+		Subsystem->AddMappingContext(DefaultMappingContext, 0);
 	}
 }
 

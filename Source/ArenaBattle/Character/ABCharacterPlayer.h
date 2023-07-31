@@ -17,6 +17,9 @@ class ARENABATTLE_API AABCharacterPlayer : public AABCharacterBase
 	
 public:
 	AABCharacterPlayer();
+
+protected:
+	virtual void BeginPlay() override;
 	
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, Meta = (AllowPrivateAccess = "true"))
