@@ -75,5 +75,11 @@ void AABCharacterBase::SetCharacterControlData(const UABCharacterControlDataAsse
 	bUseControllerRotationPitch = CharacterControlData->bUseControlRotationPitch;
 
 	bUseControllerRotationRoll = CharacterControlData->bUseControlRotationRoll;
+
+	GetCharacterMovement()->RotationRate = CharacterControlData->RotationRate;
+
+	GetCharacterMovement()->bUseControllerDesiredRotation = CharacterControlData->bUseControllerDesiredRotation;
+
+	GetCharacterMovement()->bOrientRotationToMovement = CharacterControlData->bOrientRotationToMovement;
 }
 

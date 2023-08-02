@@ -30,10 +30,10 @@ public:
 	FRotator RotationRate;
 
 	UPROPERTY(EditAnywhere, Category = CharacterMovement)
-	uint32 bUseControlDesiredRotation : 1;
+	uint32 bUseControllerDesiredRotation : 1;
 
 	UPROPERTY(EditAnywhere, Category = CharacterMovement)
-	uint32 bOrientRotationMovement : 1;
+	uint32 bOrientRotationToMovement : 1;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	TObjectPtr<class UInputMappingContext> InputMappingContext;

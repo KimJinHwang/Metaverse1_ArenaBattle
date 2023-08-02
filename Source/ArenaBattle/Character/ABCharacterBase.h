@@ -28,8 +28,8 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 protected:
-	UPROPERTY(EditAnywhere, Categroy = CharacterControl, Meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, Category = CharacterControl, Meta = (AllowPrivateAccess = "true"))
 	TMap<ECharacterControlType, class UABCharacterControlDataAsset*> CharacterControlManager;
 
-	void SetCharacterControlData(const UABCharacterControlDataAsset* CharacterControlData);
+	virtual void SetCharacterControlData(const UABCharacterControlDataAsset* CharacterControlData);
 };
