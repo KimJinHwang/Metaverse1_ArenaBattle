@@ -50,4 +50,13 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = SpringArm)
 	uint32 bDoCollisionTest : 1;
+
+	UPROPERTY(EditAnywhere, Category = SpringArm)
+		uint32 bInheritYaw : 1;
+
+	UPROPERTY(EditAnywhere, Category = SpringArm)
+		uint32 bInheritRoll : 1;
+
+	UPROPERTY(EditAnywhere, Category = SpringArm)
+		uint32 bInheritPitch : 1;
 };
