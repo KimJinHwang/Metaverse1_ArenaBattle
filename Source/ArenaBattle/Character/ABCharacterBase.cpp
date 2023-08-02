@@ -41,7 +41,7 @@ AABCharacterBase::AABCharacterBase()
 		GetMesh()->SetSkeletalMesh(CharacterMeshRef.Object);
 	}
 
-	static ConstructorHelpers::FClassFinder<UAnimInstance> CharacterAnimRef(TEXT("/Game/Characters/Mannequins/Animations/ABP_Quinn.ABP_Quinn_C"));
+	static ConstructorHelpers::FClassFinder<UAnimInstance> CharacterAnimRef(TEXT("/Game/ArenaBattle/Animation/ABP_Player.ABP_Player_C"));
 	if (CharacterAnimRef.Class)
 	{
 		GetMesh()->SetAnimInstanceClass(CharacterAnimRef.Class);
