@@ -31,9 +31,21 @@ protected:
 	uint32 bIsRunning : 1;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Character)
+		float MoveThreshould;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Character)
 	float GroundSpeed;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Character)
 	FVector Velocity;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Character)
+		uint32 bIsJumping : 1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Character)
+		uint32 bIsFalling : 1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Character)
+		float JumpThreshould;
 	
 };

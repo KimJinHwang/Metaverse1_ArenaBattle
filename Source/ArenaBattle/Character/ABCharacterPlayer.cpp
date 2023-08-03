@@ -12,7 +12,7 @@
 
 AABCharacterPlayer::AABCharacterPlayer()
 {
-	GetCharacterMovement()->MaxAcceleration = 200.0f;
+	//GetCharacterMovement()->MaxAcceleration = 200.0f;
 
 	// Camera
 	CameraBoom = CreateDefaultSubobject<USpringArmComponent>(TEXT("CameraBoom"));

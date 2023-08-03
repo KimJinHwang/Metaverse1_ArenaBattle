@@ -7,6 +7,8 @@
 
 UABAnimInstance::UABAnimInstance()
 {
+	MoveThreshould = 3.0f;
+	JumpThreshould = 100.0f;
 }
 
 void UABAnimInstance::NativeInitializeAnimation()
@@ -29,6 +31,9 @@ void UABAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		Velocity = Movement->Velocity;
 		GroundSpeed = Velocity.Size2D();
 
-		bIsRunning = GroundSpeed > 3.0f;
+		bIsRunning = GroundSpeed > MoveThreshould;
+
+		bIsFalling = Movement->IsFalling();
+		bIsJumping = bIsFalling & (Velocity.Z > JumpThreshould);
 	}
 }
