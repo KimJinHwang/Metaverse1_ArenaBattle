@@ -6,6 +6,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "InputMappingContext.h"
 #include "Character/ABCharacterControlDataAsset.h"
+#include "Character/ABComboActionData.h"
 
 // Sets default values
 AABCharacterBase::AABCharacterBase()
@@ -85,7 +86,53 @@ void AABCharacterBase::SetCharacterControlData(const UABCharacterControlDataAsse
 
 void AABCharacterBase::ProcessComboAttack()
 {
+	if (CurrentCombo == 0)
+	{
+		ComboActionBegin();
+	}
+
+
+}
+
+void AABCharacterBase::ComboActionBegin()
+{
+	CurrentCombo = 1;
+
+	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
+
+	const float AttackSpeedRate = 1.0f;
+
 	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
-	AnimInstance->Montage_Play(ComboActionMontage);
+	AnimInstance->Montage_Play(ComboActionMontage, AttackSpeedRate);
+
+	FOnMontageEnded EndDelegate;
+	EndDelegate.BindUObject(this, &AABCharacterBase::ComboActionEnd);
+	AnimInstance->Montage_SetEndDelegate(EndDelegate, ComboActionMontage);
+}
+
+void AABCharacterBase::ComboActionEnd(UAnimMontage* TargetMontage, bool IsEnded)
+{
+	CurrentCombo = 0;
+
+	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
+}
+
+void AABCharacterBase::SetComboCheckTimer()
+{
+	int32 ComboIndex = CurrentCombo - 1;
+	ensure(ComboActionData->EffectiveFrameCount.IsValidIndex(ComboIndex));
+
+	const float AttackSpeedRate = 1.0f;
+
+	float ComboEffectiveTime = (ComboActionData->EffectiveFrameCount[ComboIndex] / ComboActionData->FrameRate) / AttackSpeedRate;
+
+	if (ComboEffectiveTime > 0.0f)
+	{
+		GetWorld()->GetTimerManager().SetTimer(ComboTimerHandle, this, &AABCharacterBase::ComboCheck, ComboEffectiveTime, false);
+	}
+}
+
+void AABCharacterBase::ComboCheck()
+{
 }
 
