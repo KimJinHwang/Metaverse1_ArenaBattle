@@ -32,4 +32,9 @@ protected:
 	TMap<ECharacterControlType, class UABCharacterControlDataAsset*> CharacterControlManager;
 
 	virtual void SetCharacterControlData(const UABCharacterControlDataAsset* CharacterControlData);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animation)
+		TObjectPtr<class UAnimMontage> ComboActionMontage;
+
+	void ProcessComboAttack();
 };

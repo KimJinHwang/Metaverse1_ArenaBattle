@@ -12,7 +12,7 @@ AABGameModeBase::AABGameModeBase()
 	//	DefaultPawnClass = ThirdPersonClassRef.Class;
 	//}
 
-	static ConstructorHelpers::FClassFinder<APawn> DefaultPawnClassRef(TEXT("/Script/ArenaBattle.ABCharacterPlayer"));
+	static ConstructorHelpers::FClassFinder<APawn> DefaultPawnClassRef(TEXT("/Game/ArenaBattle/Character/BP_CharacterPlayer.BP_CharacterPlayer_C"));
 	if (DefaultPawnClassRef.Class)
 	{
 		DefaultPawnClass = DefaultPawnClassRef.Class;

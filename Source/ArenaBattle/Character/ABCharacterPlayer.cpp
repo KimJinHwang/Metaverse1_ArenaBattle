@@ -61,6 +61,12 @@ AABCharacterPlayer::AABCharacterPlayer()
 		ChangeControlAction = InputActionChangeControlRef.Object;
 	}
 
+	static ConstructorHelpers::FObjectFinder<UInputAction> InputActionAttackRef(TEXT("/Script/EnhancedInput.InputAction'/Game/ArenaBattle/Input/Actions/IA_Attack.IA_Attack'"));
+	if (InputActionAttackRef.Object)
+	{
+		AttackAction = InputActionAttackRef.Object;
+	}
+
 	CurrentCharacterControlType = ECharacterControlType::Quater;
 }
 
@@ -75,6 +81,11 @@ void AABCharacterPlayer::BeginPlay()
 	//}
 
 	SetCharacterControl(CurrentCharacterControlType);
+}
+
+void AABCharacterPlayer::Attack()
+{
+	Super::ProcessComboAttack();
 }
 
 void AABCharacterPlayer::ShoulderMove(const FInputActionValue& Value)
@@ -175,4 +186,5 @@ void AABCharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	EnhancedInputComponent->BindAction(ShoulderLookAction, ETriggerEvent::Triggered, this, &AABCharacterPlayer::ShoulderLook);
 	EnhancedInputComponent->BindAction(QuaterMoveAction, ETriggerEvent::Triggered, this, &AABCharacterPlayer::QuaterMove);
 	EnhancedInputComponent->BindAction(ChangeControlAction, ETriggerEvent::Triggered, this, &AABCharacterPlayer::ChangeControl);
+	EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &AABCharacterPlayer::Attack);
 }

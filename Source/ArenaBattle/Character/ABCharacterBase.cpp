@@ -83,3 +83,9 @@ void AABCharacterBase::SetCharacterControlData(const UABCharacterControlDataAsse
 	GetCharacterMovement()->bOrientRotationToMovement = CharacterControlData->bOrientRotationToMovement;
 }
 
+void AABCharacterBase::ProcessComboAttack()
+{
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	AnimInstance->Montage_Play(ComboActionMontage);
+}
+
