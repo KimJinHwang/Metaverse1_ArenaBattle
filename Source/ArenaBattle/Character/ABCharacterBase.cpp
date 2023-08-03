@@ -89,9 +89,17 @@ void AABCharacterBase::ProcessComboAttack()
 	if (CurrentCombo == 0)
 	{
 		ComboActionBegin();
+		return;
 	}
 
-
+	if (!ComboTimerHandle.IsValid())
+	{
+		HasNextComboCommand = false;
+	}
+	else
+	{
+		HasNextComboCommand = true;
+	}
 }
 
 void AABCharacterBase::ComboActionBegin()
@@ -108,6 +116,9 @@ void AABCharacterBase::ComboActionBegin()
 	FOnMontageEnded EndDelegate;
 	EndDelegate.BindUObject(this, &AABCharacterBase::ComboActionEnd);
 	AnimInstance->Montage_SetEndDelegate(EndDelegate, ComboActionMontage);
+
+	ComboTimerHandle.Invalidate();
+	SetComboCheckTimer();
 }
 
 void AABCharacterBase::ComboActionEnd(UAnimMontage* TargetMontage, bool IsEnded)
@@ -130,9 +141,27 @@ void AABCharacterBase::SetComboCheckTimer()
 	{
 		GetWorld()->GetTimerManager().SetTimer(ComboTimerHandle, this, &AABCharacterBase::ComboCheck, ComboEffectiveTime, false);
 	}
+	else
+	{
+		UE_LOG(LogTemp, Log, TEXT("%f"), ComboEffectiveTime);
+	}
 }
 
 void AABCharacterBase::ComboCheck()
 {
+	ComboTimerHandle.Invalidate();
+
+	if (HasNextComboCommand)
+	{
+		CurrentCombo = FMath::Clamp(CurrentCombo + 1, 1, ComboActionData->MaxComboCount);
+
+		FName NextSectionName = *FString::Printf(TEXT("%s%d"), *ComboActionData->MontageSectionPrefix, CurrentCombo);
+
+		UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+		AnimInstance->Montage_JumpToSection(NextSectionName, ComboActionMontage);
+
+		SetComboCheckTimer();
+		HasNextComboCommand = false;
+	}
 }
 
