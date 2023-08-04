@@ -165,3 +165,30 @@ void AABCharacterBase::ComboCheck()
 	}
 }
 
+void AABCharacterBase::AttackHitCheck()
+{
+	FCollisionQueryParams Params(SCENE_QUERY_STAT(Attack), false, this);
+
+	FHitResult OutHitResult;
+	const float AttackRange = 120.0f;
+	const float Radius = 50.0f;
+
+	const FVector Start = GetActorLocation() + GetActorForwardVector() * GetCapsuleComponent()->GetScaledCapsuleRadius();
+	const FVector End = Start + GetActorForwardVector() * AttackRange;
+
+	bool bIsHit = GetWorld()->SweepSingleByChannel(OutHitResult, Start, End, FQuat::Identity, ECC_GameTraceChannel3, FCollisionShape::MakeSphere(Radius), Params);
+
+	if (bIsHit)
+	{
+
+	}
+
+#if ENABLE_DRAW_DEBUG
+	FVector CapsulePosition = Start + (End - Start) / 2.0f;
+	float HalfHeight = AttackRange / 2.0f;
+	FColor Color = bIsHit ? FColor::Green : FColor::Red;
+
+	DrawDebugCapsule(GetWorld(), CapsulePosition, HalfHeight, Radius, FQuat::Identity, Color, false, 3.0f);
+#endif
+}
+
