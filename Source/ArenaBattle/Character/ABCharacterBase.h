@@ -37,6 +37,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animation)
 		TObjectPtr<class UAnimMontage> ComboActionMontage;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Animation)
+		TObjectPtr<class UAnimMontage> DeadMontage;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = AttackData, Meta = (AllowPrivateAccess = "true"))
 		TObjectPtr<class UABComboActionData> ComboActionData;
 
@@ -52,6 +55,10 @@ protected:
 
 	void SetComboCheckTimer();
 	void ComboCheck();
+
+	void SetDead();
+
+	virtual float TakeDamage(float Damage, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
 public:
 	virtual void AttackHitCheck() override;

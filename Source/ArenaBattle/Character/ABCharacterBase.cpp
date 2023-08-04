@@ -7,6 +7,7 @@
 #include "InputMappingContext.h"
 #include "Character/ABCharacterControlDataAsset.h"
 #include "Character/ABComboActionData.h"
+#include "Engine/DamageEvents.h"
 
 // Sets default values
 AABCharacterBase::AABCharacterBase()
@@ -20,12 +21,12 @@ AABCharacterBase::AABCharacterBase()
 
 	// Capsule Component
 	GetCapsuleComponent()->InitCapsuleSize(35.0f, 90.0f);
-	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Pawn"));
+	GetCapsuleComponent()->SetCollisionProfileName(TEXT("ABCapsule"));
 
 	// SkeletalMesh Component
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -90.0f), FRotator(0.0f, -90.0f, 0.0f));
 	GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
-	GetMesh()->SetCollisionProfileName(TEXT("CharacterMesh"));
+	GetMesh()->SetCollisionProfileName(TEXT("NoCollision"));
 
 	// CharacterMovement Component
 	GetCharacterMovement()->bOrientRotationToMovement = true;
@@ -60,6 +61,14 @@ AABCharacterBase::AABCharacterBase()
 	{
 		CharacterControlManager.Add(ECharacterControlType::Quater, QuaterDataRef.Object);
 	}
+
+	static ConstructorHelpers::FObjectFinder<UAnimMontage> DeadMontageRef(TEXT("/ Script / Engine.AnimMontage'/Game/ArenaBattle/Animation/AM_Dead.AM_Dead'"));
+	if (DeadMontageRef.Object)
+	{
+		DeadMontage = DeadMontageRef.Object;
+	}
+
+	
 }
 
 // Called to bind functionality to input
@@ -165,12 +174,31 @@ void AABCharacterBase::ComboCheck()
 	}
 }
 
+void AABCharacterBase::SetDead()
+{
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	AnimInstance->StopAllMontages(0.0f);
+	AnimInstance->Montage_Play(DeadMontage);
+
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+}
+
+float AABCharacterBase::TakeDamage(float Damage, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	Super::TakeDamage(Damage, DamageEvent, EventInstigator, DamageCauser);
+
+	// TODO 
+	SetDead();
+
+	return 0.0f;
+}
+
 void AABCharacterBase::AttackHitCheck()
 {
 	FCollisionQueryParams Params(SCENE_QUERY_STAT(Attack), false, this);
 
 	FHitResult OutHitResult;
-	const float AttackRange = 120.0f;
+	const float AttackRange = 320.0f;
 	const float Radius = 50.0f;
 
 	const FVector Start = GetActorLocation() + GetActorForwardVector() * GetCapsuleComponent()->GetScaledCapsuleRadius();
@@ -180,7 +208,8 @@ void AABCharacterBase::AttackHitCheck()
 
 	if (bIsHit)
 	{
-
+		FDamageEvent DamageEvent;
+		OutHitResult.GetActor()->TakeDamage(100.0f, DamageEvent, GetController(), this);
 	}
 
 #if ENABLE_DRAW_DEBUG
@@ -188,7 +217,9 @@ void AABCharacterBase::AttackHitCheck()
 	float HalfHeight = AttackRange / 2.0f;
 	FColor Color = bIsHit ? FColor::Green : FColor::Red;
 
-	DrawDebugCapsule(GetWorld(), CapsulePosition, HalfHeight, Radius, FQuat::Identity, Color, false, 3.0f);
+	//DrawDebugCapsule(GetWorld(), CapsulePosition, HalfHeight, Radius, FQuat::Identity, Color, false, 3.0f);
+
+	DrawDebugCapsule(GetWorld(), CapsulePosition, HalfHeight, Radius, FRotationMatrix::MakeFromZ(GetActorForwardVector()).ToQuat(), Color, false, 3.0f);
 #endif
 }
 
